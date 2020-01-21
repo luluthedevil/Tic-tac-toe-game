@@ -15,27 +15,43 @@ const winCombos = [
 const cells = document.querySelectorAll(".cell");
 
 startGame();
+clearScreem();
+
+function clearScreem(){
+    for(var i=0; i<cells.length; i++){
+        if(cells[i].innerText == "."){
+            cells[i].style.color = "white";
+        }
+        else{
+            cells[i].style.color = "black";
+        }
+    }
+}
 
 function startGame(){
     document.querySelector(".endgame").style.display = "none";
     origBoard = Array.from(Array(9).keys());
     for(var i=0; i<cells.length; i++){
-        cells[i].innerText = "";
+        cells[i].innerText = ".";
         cells[i].style.removeProperty("background-color");
         cells[i].addEventListener("click", turnClick, false);
         position = 0;
+        clearScreem();
     }
 }
 
 function turnClick(square){
-    turn(square.target.id, players[position]);
-    return position;
+    if(square.target.innerText == "."){
+        turn(square.target.id, players[position]);
+        return position;
+    }
 }
 
 function turn(squareId, player){
     origBoard[squareId] = player;
     document.getElementById(squareId).innerText = player;
-    let gameWon = checkWin(origBoard,player)
+    clearScreem();
+    let gameWon = checkWin(origBoard,player);
     if(gameWon){
         gameOver(gameWon);
     }
